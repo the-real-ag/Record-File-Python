@@ -8,7 +8,7 @@
 
 def decToBOH(dec, b=False,o = False, h = False): #General Function for Decimal to Binary, Octal Or Hex
     dec = int(dec)
-    base = 2 if b else 8 if o else 16 if h else 1 #Deciding the base value (1 is buffer value)
+    base = 2 if b else 8 if o else 16 if h else 10 #Deciding the base value
     val = ""
     while dec!=0:
         rem = dec%base
@@ -19,7 +19,7 @@ def decToBOH(dec, b=False,o = False, h = False): #General Function for Decimal t
         dec//=base
     return val[::-1]
 def BOHToDec(val, b = False, o = False, h = False): #General Function for Binary, Octal or Hex to Decimal
-    base = 2 if b else 8 if o else 16 if h else 1 #Deciding Base value
+    base = 2 if b else 8 if o else 16 if h else 10 #Deciding Base value
     val = str(val)[::-1].upper()
     num = 0
     for i in range(len(val)):
