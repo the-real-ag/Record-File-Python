@@ -20,14 +20,14 @@ def search_by_mood(mood):
     gens = mood_genre(mood)
     print(gens)
     res = sp.search(f"genre:{gens}", type="track", limit=12)['tracks']["items"]
-    a = [{"name": x["name"],"id": x["id"], "art": x["album"]["images"][-2]} for x in res]
+    a = [{"name": x["name"],"id": x["id"], "art": x["album"]["images"][-2]['url']} for x in res]
     return a
 def search_tracks(q):
     res = sp.search(f"{q}", type="track", limit=12)['tracks']["items"]
-    a = [{"name": x["name"],"id": x["id"], "art": x["album"]["images"][-2]} for x in res]
+    a = [{"name": x["name"],"id": x["id"], "art": x["album"]["images"][-2]['url']} for x in res]
     return a
 def retrieve_music(ids):
-    a = [{"name": x["name"],"id": x["id"], "art": x["album"]["images"][-2]} for x in sp.tracks(tracks=ids)["tracks"]]
+    a = [{"name": x["name"],"id": x["id"], "art": x["album"]["images"][-2]['url']} for x in sp.tracks(tracks=ids)["tracks"]]
     return a
 def auth(username, password, mode="login"):
     if mode == "login":
@@ -67,8 +67,12 @@ def get_playlists(uid,):
         return [{ "pid": x[0], "songs": json.loads(x[1])} for x in con.fetchall()]
 #__main__
 
-id = input("enter id")
-password = input("Password")
-a = auth(id,password, mode="login")
-songs = [1,2,3]
-print(get_playlists(a))
+# id = input("enter id")
+# password = input("Password")
+# a = auth(id,password, mode="login")
+# songs = [1,2,3]
+'''
+Song Data format:
+[{"name": '', "id": '', "art": ''}]
+'''
+print(search_tracks("Hi"))
