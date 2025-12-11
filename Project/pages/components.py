@@ -6,7 +6,7 @@ from streamlit_product_card import product_card
 def song_container(id,img,name,onclick =None, large = True, act = True, ):
     c = st.container(border=True)
     cover,title,action = c.columns((1.5 if large else 1,10,1.5 if large else 1), vertical_alignment="center")
-    cover.image(img, use_container_width=True)
+    cover.image(img, width="stretch")
     title.write(f"####{"#" if not large else ""} {name}")
     if act:
         action.button("...", width=100, key=id, on_click=onclick)

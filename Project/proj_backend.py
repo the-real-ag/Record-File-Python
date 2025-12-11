@@ -36,20 +36,21 @@ def auth(username, password, mode="login"):
                 con.execute(f"select id from auth where Username = '{username}' and Password  = '{password}'")
                 values = con.fetchall()
                 if len(values) == 0:
-                    raise ValueError("Incorrect email or password")
+                    raise ValueError("Incorrect username or password")
                 else:
                     return values[0][0]
             except Exception as e:
-                print(e)
+                raise ValueError(e)
+                
     elif mode == "signup":
         with scon.cursor() as con:
             try:
                 con.execute(f"insert into auth (Username,Password) values('{username}','{password}') ")
                 return auth(username, password)
             except Exception as e:
-                if e[0] == 1062:
+                if e.args[0] == 1062:
                     print("Username Already Exists")
-                    raise ValueError("Email Already exists")
+                    raise ValueError("Username Already exists")
 
 def create_playlist(uid, name, songs):
     with scon.cursor() as con:
@@ -75,4 +76,3 @@ def get_playlists(uid,):
 Song Data format:
 [{"name": '', "id": '', "art": ''}]
 '''
-print(search_tracks("Hi"))
