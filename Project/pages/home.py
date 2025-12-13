@@ -16,8 +16,7 @@ if q!="":
     with st.spinner(show_time=True):
         time.sleep(2)
     songs = search_tracks(q)
-    print(songs)
 if songs:
     with st.container() :
         for x in songs:
-            song_container(id=x["id"], img=x["art"], name=x["name"])
+            song_container(song = x, onclick="add")

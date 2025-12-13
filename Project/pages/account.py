@@ -8,6 +8,7 @@ def logout():
         del st.session_state[x]
     print([x for x in st.session_state])
 
+
 if "login" not in st.session_state:
     st.session_state.login = True
 @st.dialog("Login" if st.session_state.login else "Signup", dismissible=False)
@@ -30,9 +31,14 @@ def auth_dialog():
             if "login_err_text" in st.session_state:
                 del st.session_state.login_err_text
             st.rerun()
+
+
 if "uid" not in st.session_state:
     auth_dialog()
+
+
 st.write("## Account options")
 if "uid" in st.session_state:
+    st.toast("###### Login Successful!", duration=2)
     st.write(f"**User id**: {st.session_state.uid}")
 st.button("**Logout**",type="primary", on_click=logout, key="logout")

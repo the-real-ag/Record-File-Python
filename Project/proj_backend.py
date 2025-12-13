@@ -18,7 +18,7 @@ def mood_genre(mood):
         return a
 def search_by_mood(mood):
     gens = mood_genre(mood)
-    print(gens)
+    # print(gens)
     res = sp.search(f"genre:{gens}", type="track", limit=12)['tracks']["items"]
     a = [{"name": x["name"],"id": x["id"], "art": x["album"]["images"][-2]['url']} for x in res]
     return a
@@ -52,7 +52,7 @@ def auth(username, password, mode="login"):
                     print("Username Already Exists")
                     raise ValueError("Username Already exists")
 
-def create_playlist(uid, name, songs):
+def create_playlist(uid, name, songs = []):
     with scon.cursor() as con:
         song_json = json.dumps(songs)
         try:
@@ -64,8 +64,12 @@ def edit_playlist(uid, pid, songs):
         con.execute(f"update playlist set playlist_data='{json.dumps(songs)}' where uid={uid} and pid={pid}")
 def get_playlists(uid,):
     with scon.cursor() as con:
-        con.execute(f"select playlist.pid,playlist.playlist_data from auth inner join playlist on auth.id=playlist.uid where playlist.uid = {uid};")
-        return [{ "pid": x[0], "songs": json.loads(x[1])} for x in con.fetchall()]
+        con.execute(f"select playlist.pid,playlist.name,playlist.playlist_data from auth inner join playlist on auth.id=playlist.uid where playlist.uid = {uid};")
+        return [{ "pid": x[0],"name": x[1], "songs": json.loads(x[2])} for x in con.fetchall()]
+def get_playlist(uid,pid):
+    with scon.cursor() as con:
+        con.execute(f"select playlist.pid,playlist.name,playlist.playlist_data from auth inner join playlist on auth.id=playlist.uid where playlist.uid = {uid} and playlist.pid = {pid};")
+        return [{ "pid": x[0],"name": x[1], "songs": json.loads(x[2])} for x in con.fetchall()]
 #__main__
 
 # id = input("enter id")
