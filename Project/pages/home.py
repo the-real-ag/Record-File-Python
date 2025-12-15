@@ -9,12 +9,16 @@ st.title("Search Songs")
 
 if "login" not in st.session_state:
     st.switch_page("pages/account.py")
+if "last_search" not in st.session_state:
+    st.session_state.last_search = ""
 
 q = st.text_input("Song Name", key="qsong", label_visibility="hidden")
 songs = ""
 if q!="":
-    with st.spinner(show_time=True):
-        time.sleep(2)
+    if st.session_state.last_search != q:
+        with st.spinner(show_time=True):
+            time.sleep(2)
+    st.session_state.last_search = q
     songs = search_tracks(q)
 if songs:
     with st.container() :

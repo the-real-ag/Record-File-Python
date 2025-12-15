@@ -6,6 +6,10 @@ from pages.components import song_container
 import Project.proj_backend as bckend
 
 st.title("Search by mood")
+if "login" not in st.session_state:
+    st.switch_page("pages/account.py")
+if "last_mood" not in st.session_state:
+    st.session_state.last_mood = ""
 
 mood = st.selectbox("Mood",
              ["","Sad", "Calm", "Angry", "Happy", "Romantic", "Energetic", "Varied"],
@@ -15,8 +19,10 @@ mood = st.selectbox("Mood",
 
 
 if mood!="":
-    with st.spinner(show_time=True):
-        time.sleep(2)
+    if st.session_state.last_mood != mood:
+        with st.spinner(show_time=True):
+            time.sleep(2)
+    st.session_state.last_mood = mood
     songs = bckend.search_by_mood(mood)
     if songs:
         with st.container() :

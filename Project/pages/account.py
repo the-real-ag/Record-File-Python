@@ -11,6 +11,8 @@ def logout():
 
 if "login" not in st.session_state:
     st.session_state.login = True
+
+
 @st.dialog("Login" if st.session_state.login else "Signup", dismissible=False)
 def auth_dialog():
     username = st.text_input("**Username**")
@@ -35,10 +37,13 @@ def auth_dialog():
 
 if "uid" not in st.session_state:
     auth_dialog()
+    st.session_state.auth_toast = True
 
 
 st.write("## Account options")
 if "uid" in st.session_state:
-    st.toast("###### Login Successful!", duration=2)
+    if st.session_state.auth_toast:
+        st.toast("###### Login Successful!", duration=2)
+        st.session_state.auth_toast = False
     st.write(f"**User id**: {st.session_state.uid}")
 st.button("**Logout**",type="primary", on_click=logout, key="logout")

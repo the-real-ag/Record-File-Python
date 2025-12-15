@@ -5,7 +5,8 @@ from pages.components import song_container
 
 import Project.proj_backend as bckend
 
-
+if "login" not in st.session_state:
+    st.switch_page("pages/account.py")
 @st.dialog("Create Playlist")
 def create_playlist_dialog(songs = []):
     name = st.text_input("Name of playlist")
@@ -44,5 +45,5 @@ st.space(1)
 for x in bckend.get_playlists(st.session_state.uid):
     playlist_con = st.expander(label=x["name"])
     with playlist_con:
-        for x in x["songs"]:
-            song_container(song = x, large = False, onclick="remove")
+        for s in x["songs"]:
+            song_container(song = s, large = False, onclick="remove", playlist=x)

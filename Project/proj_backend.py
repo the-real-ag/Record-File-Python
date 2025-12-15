@@ -2,6 +2,7 @@ import json
 
 import pymysql as sql
 import spotipy
+import streamlit as st
 from spotipy.oauth2 import SpotifyOAuth
 
 scon = sql.connect(user="root", host='localhost', password="mvn123", database="music", autocommit=True)
@@ -16,12 +17,14 @@ def mood_genre(mood):
         con.execute(f"select * from gen_mood where mood='{mood}'")
         a = [x[0] for x in con]
         return a
+@st.cache_data
 def search_by_mood(mood):
     gens = mood_genre(mood)
     # print(gens)
     res = sp.search(f"genre:{gens}", type="track", limit=12)['tracks']["items"]
     a = [{"name": x["name"],"id": x["id"], "art": x["album"]["images"][-2]['url']} for x in res]
     return a
+@st.cache_data
 def search_tracks(q):
     res = sp.search(f"{q}", type="track", limit=12)['tracks']["items"]
     a = [{"name": x["name"],"id": x["id"], "art": x["album"]["images"][-2]['url']} for x in res]
@@ -54,7 +57,7 @@ def auth(username, password, mode="login"):
 
 def create_playlist(uid, name, songs = []):
     with scon.cursor() as con:
-        song_json = json.dumps(songs)
+        song_json = json.dumps(songs, ensure_ascii=False)
         try:
             con.execute(f"insert into playlist(name, playlist_data, uid) values('{name}', '{song_json}', {uid})")
         except Exception as e:
@@ -65,6 +68,10 @@ def edit_playlist(uid, pid, songs):
 def get_playlists(uid,):
     with scon.cursor() as con:
         con.execute(f"select playlist.pid,playlist.name,playlist.playlist_data from auth inner join playlist on auth.id=playlist.uid where playlist.uid = {uid};")
+        # try:
+        #     print([json.loads(x[2]) for x in con.fetchall()])
+        # except Exception as e:
+        #     print(e)
         return [{ "pid": x[0],"name": x[1], "songs": json.loads(x[2])} for x in con.fetchall()]
 def get_playlist(uid,pid):
     with scon.cursor() as con:
