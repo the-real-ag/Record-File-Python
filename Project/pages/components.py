@@ -8,7 +8,6 @@ import Project.proj_backend as backend
 # This includes General components for the site
 if "open_action_dialog" not in st.session_state:
     st.session_state.open_action_dialog = False
-
 def song_container(song,onclick = "none", large = True, act = True, playlist = None):
     id,img,name = song["id"], song["art"], song["name"]
     c = st.container(border=True)
